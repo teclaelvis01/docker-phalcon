@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+### PHP-FPM ##############################################
+    php-fpm:
+      image: teclaelvis01/php-fpm:7.2.1
+      volumes:
+        - ./php-fpm/php7.2.ini:/usr/local/etc/php/php.ini
+        - ./:/var/www:cached
+      expose:
+        - "9000"
+### NGINX Server #########################################
+    nginx:
+      image: teclaelvis01/nginx:0.0.1
+      volumes:
+        - ./:/var/www:cached
+        - ./logs/nginx:/var/log/nginx
+        - ./nginx/sites/:/etc/nginx/sites-available
+      ports:
+        - "8082:80"
+      depends_on:
+        - php-fpm

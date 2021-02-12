@@ -3,7 +3,7 @@ version: '3'
 services:
 ### PHP-FPM ##############################################
     php-fpm:
-      image: teclaelvis01/php-fpm:7.2.1
+      image: teclaelvis01/php-fpm:7.2.2
       volumes:
         - ./php-fpm/php7.2.ini:/usr/local/etc/php/php.ini
         - ../:/var/www:cached

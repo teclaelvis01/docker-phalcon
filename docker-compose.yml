@@ -11,6 +11,7 @@ services:
       volumes:
         - ./php-fpm/php7.2.ini:/usr/local/etc/php/php.ini
         - ../:/var/www:cached
+        - ./xdebug:/var/logs/xdebug
       expose:
         - "9000"
       # extra_hosts:
@@ -20,6 +21,7 @@ services:
 ### NGINX Server #########################################
     nginx:
       image: teclaelvis01/nginx:0.0.1
+      container_name: nginx_tork_es
       volumes:
         - ../:/var/www:cached
         - ./logs/nginx:/var/log/nginx
@@ -34,6 +36,7 @@ services:
 ### MariaDB ##############################################
     mariadb:
       image: teclaelvis01/mariadb:10
+      container_name: mariadb_tork_es
       volumes:
         - ./datadb/mariadb:/var/lib/mysql
         - ./mariadb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d

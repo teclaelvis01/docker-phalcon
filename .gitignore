@@ -1,3 +1,4 @@
 datadb/mariadb/*
 *.log
-logs/*
+.env
+logs/

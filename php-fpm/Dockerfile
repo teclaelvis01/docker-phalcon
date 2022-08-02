@@ -13,11 +13,11 @@
 #
 
 
-FROM laradock/php-fpm:2.7-7.2
+FROM laradock/php-fpm:2.7-7.3
 
 LABEL maintainer="Elvis Reyes <teclaelvis01@gmail.com>"
 
-ARG PHP_VERSION=7.2
+ARG PHP_VERSION=7.3
 
 # Set Environment Variables
 ENV DEBIAN_FRONTEND noninteractive
@@ -62,13 +62,13 @@ RUN if [ ${INSTALL_GMP} = true ]; then \
     docker-php-ext-install gmp \
 ;fi
 
-###########################################################################
-# Imagick:
-###########################################################################
+# ###########################################################################
+# # Imagick:
+# ###########################################################################
 
-RUN apt-get install -y libmagickwand-dev imagemagick && \
-    pecl install imagick && \
-    docker-php-ext-enable imagick 
+# RUN apt-get install -y libmagickwand-dev imagemagick && \
+#     pecl install imagick && \
+#     docker-php-ext-enable imagick \
 
 
 ###########################################################################
@@ -92,10 +92,20 @@ RUN docker-php-ext-install mysqli
 # Copy phalcon configration
 COPY ./phalcon.ini /usr/local/etc/php/conf.d/phalcon.ini.disable
 
-RUN apt-get update && apt-get install -y unzip libpcre3-dev gcc make re2c \
-    && curl -L -o /tmp/cphalcon.zip https://github.com/phalcon/cphalcon/archive/v3.4.5.zip \
+
+
+
+RUN apt-get update && apt-get install -yqq unzip libpcre3-dev gcc make re2c git automake autoconf \
+    && git clone https://github.com/jbboehr/php-psr.git \
+    && cd php-psr \
+    && phpize \
+    && ./configure \
+    && make \
+    && make test \
+    && make install \
+    && curl -L -o /tmp/cphalcon.zip https://github.com/phalcon/cphalcon/archive/v4.0.6.zip \
     && unzip -d /tmp/ /tmp/cphalcon.zip \
-    && cd /tmp/cphalcon-3.4.5/build \
+    && cd /tmp/cphalcon-4.0.6/build \
     && ./install \
     && mv /usr/local/etc/php/conf.d/phalcon.ini.disable /usr/local/etc/php/conf.d/phalcon.ini \
     && rm -rf /tmp/cphalcon*
@@ -149,6 +159,7 @@ RUN sed -i "s/xdebug.cli_color=0/xdebug.cli_color=1/" /usr/local/etc/php/conf.d/
 ###########################################################################
 
 RUN set -xe; php -v | head -n 1 | grep -q "PHP ${PHP_VERSION}."
+
 
 #
 #--------------------------------------------------------------------------

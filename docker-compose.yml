@@ -3,11 +3,11 @@ version: '3'
 services:
 ### PHP-FPM ##############################################
     php-fpm:
-      build:
-        context: ./php-fpm
-        args:
-          - INSTALL_XDEBUG=true
-      # image: teclaelvis01/php-fpm:7.2.3-phalcon-4.0.6-v1
+      # build:
+      #   context: ./php-fpm
+      #   args:
+      #     - INSTALL_XDEBUG=true
+      image: teclaelvis01/php-fpm:7.3.13-xdbg
       volumes:
         - ./php-fpm/php7.2.ini:/usr/local/etc/php/php.ini
         - ../:/var/www:cached
